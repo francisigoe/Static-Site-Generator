@@ -18,8 +18,8 @@ class HTMLNode:
         print(f"tag:{self.tag} value:{self.value} children:{self.children} props:{self.props}") 
 
 class LeafNode(HTMLNode):
-    def __init__(self, value: str|None, tag: str|None, props: dict|None =None):
-        super().__init__(value,tag,props = props)
+    def __init__(self, tag: str|None, value: str|None, props: dict|None =None):
+        super().__init__(tag,value,props = props)
         
     def to_html(self):
         if not self.value:
@@ -36,7 +36,7 @@ class LeafNode(HTMLNode):
 
 class ParentNode(HTMLNode):
     def __init__(self, tag: str|None , children: list|None , props: dict|None =None):
-        super().__init__(tag,children,props = props)
+        super().__init__(tag,None,children,props = props)
 
     def to_html(self):
         if not self.tag:
@@ -45,9 +45,9 @@ class ParentNode(HTMLNode):
             raise ValueError("parent node missing children")
         child_html = ""
         for child in self.children:
-            child_html += child.to_html
+            child_html += child.to_html()
         if self.props:
             props = self.props_to_html()
-            return f"<{self.tag} {props}>{child_html}</{self.tag}>" 
-        return f"<{self.tag}>{child_html}</{self.tag}>" 
+            return (f"<{self.tag} {props}>{child_html}</{self.tag}>")
+        return(f"<{self.tag}>{child_html}</{self.tag}>") 
 
